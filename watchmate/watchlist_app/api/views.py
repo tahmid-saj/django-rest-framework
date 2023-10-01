@@ -6,21 +6,45 @@ from rest_framework.response import Response
 
 from django.http import JsonResponse
 
-@api_view(['GET',])
+@api_view(['GET', 'POST'])
 def movie_list(request):
-  movies = Movie.objects.all()
-  serializer = MovieSerializer(movies, many=True)
 
-  return Response(serializer.data)
+  if request.method == 'GET':
+    movies = Movie.objects.all()
+    serializer = MovieSerializer(movies, many=True)
 
-@api_view()
+    return Response(serializer.data)
+    
+  if request.method == 'POST':
+    serializer = MovieSerializer(data=request.data)
+
+    if serializer.is_valid():
+      serializer.save()
+
+      return Response(serializer.data)
+    else:
+      return Response(serializer.errors)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
 def movie_details(request, pk):
-  movie = Movie.objects.get(pk=pk)
-  data = {
-    'name': movie.name,
-    'description': movie.description,
-    'active': movie.active
-  }
-  print(movie.name)
+  if request.method == 'GET':
+    movie = Movie.objects.get(pk=pk)  
+    serializer = MovieSerializer(movie)
 
-  return JsonResponse(data)
+    return Response(serializer.data)
+  
+  if request.method == 'PUT':
+    movie = Movie.objects.get(pk=pk)
+    serializer = MovieSerializer(movie, data=request.data)
+
+    if serializer.is_valid():
+      serializer.save()
+
+      return Response(serializer.data)
+    else:
+      return Response(serializer.errors)
+
+  if request.method == 'DELETE':
+    movie = Movie.objects.get(pk=pk)
+    movie.delete()
