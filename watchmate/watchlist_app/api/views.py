@@ -1,5 +1,6 @@
 from watchlist_app.models import WatchList, StreamPlatform, Review
-from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
+from watchlist_app.api.serializers import (WatchListSerializer, StreamPlatformSerializer, 
+                                          ReviewSerializer)
 
 from rest_framework import status, generics, mixins
 
@@ -10,24 +11,34 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 
 
-class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class ReviewList(generics.ListCreateAPIView):
   queryset = Review.objects.all()
   serializer_class = ReviewSerializer
 
-  def get(self, request, *args, **kwargs):
-    return self.retrieve(request, *args, **kwargs)
 
-class ReviewList(mixins.ListModelMixin, 
-                  mixins.CreateModelMixin,
-                  generics.GenericAPIView):
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Review.objects.all()
   serializer_class = ReviewSerializer
 
-  def get(self, request, *args, **kwargs):
-    return self.list(request, *args, **kwargs)
+
+# class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+#   queryset = Review.objects.all()
+#   serializer_class = ReviewSerializer
+
+#   def get(self, request, *args, **kwargs):
+#     return self.retrieve(request, *args, **kwargs)
+
+# class ReviewList(mixins.ListModelMixin, 
+#                   mixins.CreateModelMixin,
+#                   generics.GenericAPIView):
+#   queryset = Review.objects.all()
+#   serializer_class = ReviewSerializer
+
+#   def get(self, request, *args, **kwargs):
+#     return self.list(request, *args, **kwargs)
   
-  def post(self, request, *args, **kwargs):
-    return self.create(request, *args, **kwargs)
+#   def post(self, request, *args, **kwargs):
+#     return self.create(request, *args, **kwargs)
 
 
 class StreamPlatformAV(APIView):
