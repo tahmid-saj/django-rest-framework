@@ -80,7 +80,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 #     else:
 #       return Response(serializer.errors)
 
-class StreamPlatformVS(viewsets.ReadOnlyModelViewSet):
+class StreamPlatformVS(viewsets.ModelViewSet):
   queryset = StreamPlatform.objects.all()
   serializer_class = StreamPlatformSerializer
 
