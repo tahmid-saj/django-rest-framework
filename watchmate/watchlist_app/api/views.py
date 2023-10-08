@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.http import JsonResponse
 
+from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
   serializer_class = ReviewSerializer
@@ -47,7 +48,7 @@ class ReviewList(generics.ListAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Review.objects.all()
   serializer_class = ReviewSerializer
-  permission_classes = [IsAuthenticated]
+  permission_classes = [ReviewUserOrReadOnly]
 
 
 # class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
