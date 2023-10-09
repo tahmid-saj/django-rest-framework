@@ -14,12 +14,15 @@ from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 
 from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
+# from watchlist_app.api.throttling import ReviewCreateThrottle, ReviewListThrottle
 
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+
 
 class ReviewCreate(generics.CreateAPIView):
   serializer_class = ReviewSerializer
   permission_classes = [IsAuthenticated]
+  # throttle_classes = [ReviewCreateThrottle]
 
   def get_queryset(self):
     return Review.objects.all()
@@ -63,6 +66,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   permission_classes = [IsReviewUserOrReadOnly]
 
   throttle_classes = [UserRateThrottle, AnonRateThrottle]
+  throttle_scope = 'review-detail'
 
 # class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 #   queryset = Review.objects.all()
