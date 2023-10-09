@@ -10,6 +10,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import filters
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from django.http import JsonResponse
 
@@ -64,6 +67,8 @@ class ReviewList(generics.ListAPIView):
   serializer_class = ReviewSerializer
   # permission_classes = [IsAuthenticated]
   throttle_classes = [UserRateThrottle, AnonRateThrottle]
+  filter_backends = [DjangoFilterBackend]
+  filterset_fields = ['review_user__username', 'active']
 
 
   def get_queryset(self):
@@ -169,6 +174,17 @@ class StreamPlatformDetailAV(APIView):
       serializer.save()
 
       return Response(serializer.data)
+    
+
+class WatchList(generics.ListAPIView):
+  queryset = Review.objects.all()
+  movies = WatchList.objects.all()
+  serializer_class = WatchListSerializer(movies, many=True)
+  # permission_classes = [IsAuthenticated]
+  # throttle_classes = [UserRateThrottle, AnonRateThrottle]
+  filter_backends = [filters.OrderingFilter]
+  ordering_fields = ['average_rating']
+
 
 
 class WatchListAV(APIView):
