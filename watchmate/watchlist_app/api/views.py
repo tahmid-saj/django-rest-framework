@@ -176,7 +176,7 @@ class StreamPlatformDetailAV(APIView):
       return Response(serializer.data)
     
 
-class WatchList(generics.ListAPIView):
+class WatchListGV(generics.ListAPIView):
   queryset = Review.objects.all()
   movies = WatchList.objects.all()
   serializer_class = WatchListSerializer(movies, many=True)
