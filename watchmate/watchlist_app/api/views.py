@@ -60,6 +60,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   permission_classes = [IsReviewUserOrReadOnly]
 
 
+
 # class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 #   queryset = Review.objects.all()
 #   serializer_class = ReviewSerializer
